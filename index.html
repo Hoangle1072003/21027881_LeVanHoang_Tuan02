@@ -1,25 +1,332 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
-    <h1>JavaScript Tasks</h1>
-    <div id="output"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Questions</title>
+  </head>
+  <body>
+    <div id="root"></div>
     <script>
-        const output = document.getElementById("output");
-        /*
-        27. Create a function that will receive an array of numbers as argument
-        and will return a new array with distinct elements
-        */
+      let output = "";
 
-        function distinctArray(arr){
-            return arr.filter((value, index, self) => self.indexOf(value) === index);
+      // Question 27
+      function getDistinctElements(arr) {
+        return [...new Set(arr)];
+      }
+      const array27 = [1, 2, 2, 3, 4, 4, 5, 6, 6];
+      const distinctArray27 = getDistinctElements(array27);
+      output += "27. Distinct elements: " + distinctArray27.join(", ") + "<br>";
+
+      // Question 28
+      function isPrime(num) {
+        if (num <= 1) return false;
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+          if (num % i === 0) return false;
         }
-        output.innerHTML += ` distinctArray([1, 2, 3, 4, 4, 5, 6, 6, 7, 8, 9, 9, 10]); => ${distinctArray([1, 2, 3, 4, 4, 5, 6, 6, 7, 8, 9, 9, 10])} <br>`;
+        return true;
+      }
+
+      function sumOfFirstNPrimes(n) {
+        const primes = [];
+        let num = 2;
+        while (primes.length < n) {
+          if (isPrime(num)) primes.push(num);
+          num++;
+        }
+        return primes;
+      }
+
+      const primes28 = sumOfFirstNPrimes(100);
+      const sumPrimes28 = primes28.reduce((a, b) => a + b, 0);
+      output += "28. Sum of first 100 prime numbers: " + sumPrimes28 + "<br>";
+
+      // Question 29
+      function calculatePrimeDistances(n) {
+        const primes = sumOfFirstNPrimes(n);
+        let distances = "";
+        for (let i = 1; i < primes.length; i++) {
+          distances += `Distance between ${primes[i - 1]} and ${primes[i]}: ${
+            primes[i] - primes[i - 1]
+          }<br>`;
+        }
+        return distances;
+      }
+      output += "29. Prime distances:<br>" + calculatePrimeDistances(100);
+
+      // Question 30
+      function addLargeNumbers(num1, num2) {
+        let carry = 0;
+        let result = "";
+        let len1 = num1.length;
+        let len2 = num2.length;
+
+        num1 = num1.padStart(Math.max(len1, len2), "0");
+        num2 = num2.padStart(Math.max(len1, len2), "0");
+
+        for (let i = num1.length - 1; i >= 0; i--) {
+          let sum = parseInt(num1[i]) + parseInt(num2[i]) + carry;
+          result = (sum % 10) + result;
+          carry = Math.floor(sum / 10);
+        }
+
+        if (carry) result = carry + result;
+
+        return result;
+      }
+      const largeSum30 = addLargeNumbers("99999999999999999999", "1");
+      output += "30. Large number sum: " + largeSum30 + "<br>";
+
+      // Question 31
+      function countWords(text) {
+        return text.trim().split(/\s+/).length;
+      }
+      const wordCount31 = countWords("Hello world, this is a test sentence.");
+      output += "31. Word count: " + wordCount31 + "<br>";
+
+      // Question 32
+      function capitalizeWords(text) {
+        return text
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
+      }
+      const capitalizedText32 = capitalizeWords("hello world this is a test");
+      output += "32. Capitalized: " + capitalizedText32 + "<br>";
+
+      // Question 33
+      function sumOfCommaDelimitedString(str) {
+        return str.split(",").reduce((sum, num) => sum + parseFloat(num), 0);
+      }
+      const sum33 = sumOfCommaDelimitedString("1,2,3,4,5");
+      output += "33. Sum of comma-delimited string: " + sum33 + "<br>";
+
+      // Question 34
+      function getWords(text) {
+        return text.split(/\s+/);
+      }
+      const words34 = getWords("This is a simple sentence.");
+      output += "34. Words in text: " + words34.join(", ") + "<br>";
+
+      // Question 35
+      function csvToArray(csv) {
+        return csv.split("\n").map((row) => row.split(","));
+      }
+      const csvArray35 = csvToArray("a,b,c\n1,2,3\n4,5,6");
+      output += "35. CSV to array: " + JSON.stringify(csvArray35) + "<br>";
+
+      // Question 36
+      function stringToArray(str) {
+        return Array.from(str);
+      }
+      const charArray36 = stringToArray("hello");
+      output +=
+        "36. String to array of characters: " + charArray36.join(", ") + "<br>";
+
+      // Question 37
+      function stringToAsciiArray(str) {
+        return Array.from(str).map((char) => char.charCodeAt(0));
+      }
+      const asciiArray37 = stringToAsciiArray("hello");
+      output += "37. ASCII codes: " + asciiArray37.join(", ") + "<br>";
+
+      // Question 38
+      function asciiArrayToString(asciiArray) {
+        return asciiArray.map((code) => String.fromCharCode(code)).join("");
+      }
+      const strFromAscii38 = asciiArrayToString(asciiArray37);
+      output += "38. String from ASCII codes: " + strFromAscii38 + "<br>";
+
+      // 39. Implement the Caesar cipher
+      function caesarCipher(str, shift) {
+        return str.replace(/[a-zA-Z]/g, (char) => {
+          const base = char <= "Z" ? 65 : 97;
+          return String.fromCharCode(
+            ((char.charCodeAt(0) - base + shift) % 26) + base
+          );
+        });
+      }
+
+      output += "39. Caesar Cipher: " + caesarCipher("HELLO", 3) + "<br>";
+
+      // 40. Implement bubble sort algorithm
+      function bubbleSort(arr) {
+        let len = arr.length;
+        for (let i = 0; i < len; i++) {
+          for (let j = 0; j < len - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+              [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+            }
+          }
+        }
+        return arr;
+      }
+
+      output +=
+        "40. Bubble Sort: " + bubbleSort([5, 3, 8, 1, 2]).join(", ") + "<br>";
+
+      // 41. Calculate the distance between two points
+      function distanceBetweenPoints(x1, y1, x2, y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+      }
+
+      output +=
+        "41. Distance between points (0,0) and (3,4): " +
+        distanceBetweenPoints(0, 0, 3, 4) +
+        "<br>";
+
+      // 42. Check if two circles intersect
+      function circlesIntersect(x1, y1, r1, x2, y2, r2) {
+        const distance = distanceBetweenPoints(x1, y1, x2, y2);
+        return distance <= r1 + r2;
+      }
+
+      output +=
+        "42. Circles intersect: " + circlesIntersect(0, 0, 5, 7, 7, 3) + "<br>";
+
+      // 43. Extract a column from a 2D array
+      function extractColumn(arr, colNum) {
+        return arr.map((row) => row[colNum]);
+      }
+
+      output +=
+        "43. Extracted column: " +
+        extractColumn(
+          [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9],
+          ],
+          1
+        ).join(", ") +
+        "<br>";
+
+      // 44. Convert binary string to number
+      function binaryToNumber(binaryStr) {
+        return parseInt(binaryStr, 2);
+      }
+
+      output += "44. Binary to number: " + binaryToNumber("1101") + "<br>";
+
+      // 45. Calculate sum of all numbers in a jagged array
+      function sumJaggedArray(arr) {
+        return arr.reduce(
+          (sum, elem) =>
+            sum + (Array.isArray(elem) ? sumJaggedArray(elem) : elem),
+          0
+        );
+      }
+
+      output +=
+        "45. Sum of jagged array: " +
+        sumJaggedArray([1, [2, 3], [4, [5, 6]]]) +
+        "<br>";
+
+      // 46. Find the maximum number in a jagged array
+      function maxJaggedArray(arr) {
+        return arr.reduce(
+          (max, elem) =>
+            Math.max(max, Array.isArray(elem) ? maxJaggedArray(elem) : elem),
+          -Infinity
+        );
+      }
+
+      output +=
+        "46. Max in jagged array: " +
+        maxJaggedArray([1, [2, 3], [4, [5, 6]]]) +
+        "<br>";
+
+      // 47. Deep copy a jagged array
+      function deepCopyArray(arr) {
+        return arr.map((elem) =>
+          Array.isArray(elem) ? deepCopyArray(elem) : elem
+        );
+      }
+
+      output +=
+        "47. Deep copy: " +
+        JSON.stringify(deepCopyArray([1, [2, 3], [4, [5, 6]]])) +
+        "<br>";
+
+      // 48. Return the longest word in a string
+      function longestWord(str) {
+        let words = str.split(/\s+/);
+        return words.reduce(
+          (longest, word) => (word.length > longest.length ? word : longest),
+          ""
+        );
+      }
+
+      output +=
+        "48. Longest word: " +
+        longestWord("This is a simple example sentence") +
+        "<br>";
+
+      // 49. Shuffle an array of strings
+      function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
+
+      output +=
+        "49. Shuffled array: " +
+        shuffleArray(["apple", "banana", "cherry"]).join(", ") +
+        "<br>";
+
+      // 50. Return n unique random numbers from 1 to n
+      function uniqueRandomNumbers(n) {
+        let arr = Array.from({ length: n }, (_, i) => i + 1);
+        return shuffleArray(arr).slice(0, n);
+      }
+
+      output +=
+        "50. Unique random numbers: " +
+        uniqueRandomNumbers(5).join(", ") +
+        "<br>";
+
+      // 51. Find frequency of letters in a string
+      function letterFrequency(str) {
+        let freq = {};
+        str
+          .replace(/\s+/g, "")
+          .split("")
+          .forEach((char) => (freq[char] = (freq[char] || 0) + 1));
+        return Object.entries(freq);
+      }
+
+      output +=
+        "51. Letter frequency: " +
+        JSON.stringify(letterFrequency("hello world")) +
+        "<br>";
+
+      // 52. Calculate Fibonacci(500) with high precision
+      function bigFibonacci(n) {
+        let a = BigInt(0),
+          b = BigInt(1);
+        for (let i = 0; i < n; i++) {
+          [a, b] = [b, a + b];
+        }
+        return a.toString();
+      }
+
+      output +=
+        "52. Fibonacci(500): " + bigFibonacci(500).slice(0, 100) + "...<br>";
+
+      // 53. Calculate 70! with high precision
+      function bigFactorial(n) {
+        let result = BigInt(1);
+        for (let i = 2; i <= n; i++) {
+          result *= BigInt(i);
+        }
+        return result.toString();
+      }
+
+      output += "53. 70!: " + bigFactorial(70) + "<br>";
+
+      document.getElementById("root").innerHTML = output;
     </script>
-</body>
+  </body>
 </html>
